@@ -28,24 +28,44 @@ const Name = styled.span`
   color: #c586c0;
 `;
 
+interface IonExpand {
+  (variablesReference: number): void;
+}
 interface IProps {
   root?: boolean;
   childrenTree?: Array<VariableTree>;
   name?: string;
-  onExpand?: () => void;
+  onExpand: IonExpand;
   hasChild: boolean;
+  variablesReference: number;
 }
 
-class VariableTree extends React.PureComponent<IProps> {
+interface IState {
+  expand: boolean;
+}
+
+class VariableTree extends React.PureComponent<IProps, IState> {
   state = {
     expand: false,
   }
 
+  handleClick = (variablesReference: number) => {
+    const { hasChild, onExpand } = this.props;
+    const { expand } = this.state;
+    if (hasChild) {
+      this.setState({
+        expand: !expand,
+      });
+
+      onExpand(variablesReference);
+    }
+  }
+
   render() {
-    const { hasChild } = this.props;
+    const { hasChild, variablesReference } = this.props;
     const { expand } = this.state;
     return (
-      <Container onClick={() => this.setState({ expand: !expand })}>
+      <Container onClick={() => this.handleClick(variablesReference)}>
         {hasChild && <Arrow expand={expand} />}
         <Name>root:</Name>
         <Value>java.util.concurrent.FutureTask (id=0x13)</Value>
