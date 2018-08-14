@@ -1,0 +1,21 @@
+{
+  "name": "react-debugger-variable-tree",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Aaaaash/react-debugger-variable-tree.git",
+  "author": "Aaaaash",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^16.4.10",
+    "@types/react-dom": "^16.0.7",
+    "parcel-bundler": "^1.9.7",
+    "storybook": "^1.0.0",
+    "tslint": "^5.11.0",
+    "tslint-config-airbnb": "^5.9.2",
+    "typescript": "^3.0.1"
+  },
+  "dependencies": {
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2"
+  }
+}
