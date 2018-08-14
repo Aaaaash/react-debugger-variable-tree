@@ -1,6 +1,6 @@
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 
-class VariableTree extends PureComponent {
+class VariableTree extends React.PureComponent {
   render() {
     return (
       <div>hello world</div>

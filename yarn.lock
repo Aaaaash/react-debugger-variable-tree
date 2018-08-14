@@ -334,6 +334,16 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
+"@types/storybook__addon-actions@^3.4.1":
+  version "3.4.1"
+  resolved "http://registry.npm.taobao.org/@types/storybook__addon-actions/download/@types/storybook__addon-actions-3.4.1.tgz#8f90d76b023b58ee794170f2fe774a3fddda2c1d"
+
+"@types/storybook__addon-links@^3.3.2":
+  version "3.3.2"
+  resolved "http://registry.npm.taobao.org/@types/storybook__addon-links/download/@types/storybook__addon-links-3.3.2.tgz#913f6dae27903da7b1f117e9b51ca473770dba50"
+  dependencies:
+    "@types/react" "*"
+
 "@types/storybook__react@^3.0.9":
   version "3.0.9"
   resolved "http://registry.npm.taobao.org/@types/storybook__react/download/@types/storybook__react-3.0.9.tgz#aac193f0c037ddfc2342bd027d720553ac089a56"
