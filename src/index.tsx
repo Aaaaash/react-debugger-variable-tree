@@ -7,15 +7,17 @@ const arrSvgExpand = `data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3
 const Container = styled.div`
   display: flex;
   justify-content: flex-start;
-  align-items: center;
   cursor: pointer;
   font-size: 12px;
+  flex-direction: column;
 `;
 
 const Arrow = styled<{ expand: boolean }, 'span'>('span')`
   display: block;
   width: 16px;
   height: 16px;
+  position: absolute;
+  left: -12px;
   background: url("${({ expand }) => expand ? arrSvgExpand : arrSvg}") 50% no-repeat;
 `;
 
@@ -24,20 +26,46 @@ const Value = styled.span`
   color: #b5cea8;
 `;
 
-const Name = styled.span`
-  color: #c586c0;
+const Header = styled.p`
+  margin: 0px;
+  display: flex;
+  align-items: center;
+  position: relative;
 `;
 
-interface IonExpand {
-  (variablesReference: number): void;
+const Name = styled<{ root: boolean }, 'span'>('span')`
+  color: ${({ root }) => root ? '#ccc' : '#c586c0'};
+  font-weight: ${({ root }) => root ? 700 : 400};
+`;
+
+const ChildVariables = styled.div`
+  padding-left: 12px;
+`;
+
+interface Variable {
+  variablesReference: number;
+  childVariables: Variable[];
+  parentVariables: number;
+  name: string;
+  value: string;
+  type: string;
+  indexedVariables: number;
+  scopeName: string;
 }
+
+interface IonExpand {
+  (scopeName: string, variablesReference: number): void;
+}
+
 interface IProps {
-  root?: boolean;
-  childrenTree?: Array<VariableTree>;
+  root: boolean;
+  childrenVariables: Variable[];
   name?: string;
+  value?: string;
   onExpand: IonExpand;
   hasChild: boolean;
-  variablesReference: number;
+  reference: number;
+  scopeName: string;
 }
 
 interface IState {
@@ -47,28 +75,52 @@ interface IState {
 class VariableTree extends React.PureComponent<IProps, IState> {
   state = {
     expand: false,
-  }
+  };
 
   handleClick = (variablesReference: number) => {
-    const { hasChild, onExpand } = this.props;
+    const { hasChild, onExpand, scopeName } = this.props;
     const { expand } = this.state;
     if (hasChild) {
       this.setState({
         expand: !expand,
       });
 
-      onExpand(variablesReference);
+      onExpand(scopeName, variablesReference);
     }
   }
 
+  renderChildVariable = () => {
+    const { childrenVariables, scopeName, onExpand } = this.props;
+    return (
+      <ChildVariables>
+        {childrenVariables.map((variable: Variable) => (
+          <VariableTree
+            scopeName={scopeName}
+            root={false}
+            key={`${scopeName}-${variable.name}-${variable.variablesReference}`}
+            reference={variable.variablesReference}
+            childrenVariables={[]}
+            hasChild={variable.variablesReference !== 0}
+            onExpand={onExpand}
+            name={variable.name}
+            value={variable.value}
+          />
+        ))}
+      </ChildVariables>
+    );
+  }
+
   render() {
-    const { hasChild, variablesReference } = this.props;
+    const { hasChild, reference, root, childrenVariables, scopeName, name, value } = this.props;
     const { expand } = this.state;
     return (
-      <Container onClick={() => this.handleClick(variablesReference)}>
-        {hasChild && <Arrow expand={expand} />}
-        <Name>root:</Name>
-        <Value>java.util.concurrent.FutureTask (id=0x13)</Value>
+      <Container onClick={() => this.handleClick(reference)}>
+        <Header >
+          {hasChild && <Arrow expand={expand} />}
+          {<Name root={root}>{root ? scopeName : `${name}:`}</Name>}
+          {!root && <Value>{value}</Value>}
+        </Header>
+        {childrenVariables && childrenVariables.length > 0 && expand && this.renderChildVariable()}
       </Container>
     );
   }

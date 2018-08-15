@@ -1,11 +1,4 @@
-import * as React from 'react';
-
-import { storiesOf } from '@storybook/react';
-import VariableTree from '../src';
-
-import './style.css';
-
-const fake = [
+[
   {
     "name": "ADDRESS_SIZE",
     "value": "0x8",
@@ -216,48 +209,4 @@ const fake = [
     "childVariables": [],
     "scopeName": "Local"
   }
-];
-
-console.log(fake);
-
-class App extends React.PureComponent {
-  state = {
-    localVariables: {
-      Local: [],
-    },
-  };
-
-  handleFetch = (scopeName: string, reference: number) => {
-    console.log(scopeName, reference);
-    const { localVariables } = this.state;
-    setTimeout(() => {
-      this.setState({
-        localVariables: {
-          ...localVariables,
-          [scopeName]: [...localVariables[scopeName], ...fake],
-        },
-      });
-    }, 100);
-  }
-
-  render() {
-    const { localVariables } = this.state;
-
-    return (
-      <div>
-        {Object.keys(localVariables).map(key => (
-          <VariableTree
-            hasChild
-            root
-            key={key}
-            onExpand={this.handleFetch}
-            reference={21}
-            childrenVariables={localVariables[key]}
-            scopeName={key}
-          />))}
-      </div>
-    );
-  }
-}
-
-storiesOf('Welcome', module).add('to Storybook', () => <App />);
+]
