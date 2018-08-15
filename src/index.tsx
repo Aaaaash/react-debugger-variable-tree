@@ -24,6 +24,9 @@ const Arrow = styled<{ expand: boolean }, 'span'>('span')`
 const Value = styled.span`
   margin-left: 6px;
   color: #b5cea8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre;
 `;
 
 const Header = styled.p`
