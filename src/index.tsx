@@ -24,8 +24,6 @@ const Arrow = styled<{ expand: boolean }, 'span'>('span')`
 const Value = styled.span`
   margin-left: 6px;
   color: #b5cea8;
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: pre;
 `;
 
@@ -34,11 +32,17 @@ const Header = styled.p`
   display: flex;
   align-items: center;
   position: relative;
+  height: 22px;
+  line-height: 22px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre;
 `;
 
 const Name = styled<{ root: boolean }, 'span'>('span')`
   color: ${({ root }) => root ? '#ccc' : '#c586c0'};
   font-weight: ${({ root }) => root ? 700 : 400};
+  white-space: pre;
 `;
 
 const ChildVariables = styled.div`
@@ -77,18 +81,20 @@ interface IState {
 
 class VariableTree extends React.PureComponent<IProps, IState> {
   state = {
-    expand: false,
+    expand: this.props.root,
   };
 
   handleClick = (variablesReference: number) => {
-    const { hasChild, onExpand, scopeName } = this.props;
+    const { hasChild, onExpand, scopeName, childrenVariables } = this.props;
     const { expand } = this.state;
     if (hasChild) {
       this.setState({
         expand: !expand,
       });
 
-      onExpand(scopeName, variablesReference);
+      if (childrenVariables && childrenVariables.length > 0) {
+        onExpand(scopeName, variablesReference);
+      }
     }
   }
 
@@ -118,10 +124,10 @@ class VariableTree extends React.PureComponent<IProps, IState> {
     const { expand } = this.state;
     return (
       <Container onClick={() => this.handleClick(reference)}>
-        <Header >
+        <Header>
           {hasChild && <Arrow expand={expand} />}
-          {<Name root={root}>{root ? scopeName : `${name}:`}</Name>}
-          {!root && <Value>{value}</Value>}
+          {<Name root={root} title={root ? scopeName : name}>{root ? scopeName : `${name}:`}</Name>}
+          {!root && <Value title={value}>{value}</Value>}
         </Header>
         {childrenVariables && childrenVariables.length > 0 && expand && this.renderChildVariable()}
       </Container>
